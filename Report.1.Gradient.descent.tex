@@ -1,0 +1,52 @@
+\documentclass{article}
+\usepackage[utf8]{inputenc}
+\usepackage{graphicx}
+\usepackage{titling}
+\usepackage{float}
+
+
+\setlength{\parindent}{0pt}
+% 1. Set professional margins (1 inch is standard)
+\usepackage[margin=1in]{geometry}
+
+% 2. Adjust the title height
+\setlength{\droptitle}{-0.5in} 
+
+\title{Labwork 1 - Gradient Descent}
+\author{Do Minh Quang - 2540095}
+% \date{May 2026}
+
+\begin{document}
+\maketitle
+
+\section{Gradient Descent Implementation}
+This labwork is for implementing gradient descent algorithm from scratch.
+
+In this labwork, I will work on $f(x) = x^2$ and the goal is to find the local minimum of the function. For the setup, I will experiment the algorithm with the initial value is $x_{0} = 5$. The core update rule of the algorithm is defined as below:
+\[x_{n+1} = x_{n} - lr \times f'(x_n)\]
+where:
+\begin{itemize}
+    \item $x_{n}$: is the current value.
+    \item $x_{n+1}$: is the update value.
+    \item $lr$: is the learning rate.
+    \item $f'(x)$: is the first order derivative at $x_n$.
+\end{itemize}
+
+As the choice of learning rate has large effect on the performance of the algorithm, I have tried 4 different learning rates, which are 0.001, 0.005, 0.1, 0.5. Below is the convergence speed of each learning rate:
+
+\begin{table}[H]
+\centering
+\label{tab:converge_iter}
+\begin{tabular}{|c|c|}
+\hline
+\textbf{Learning rate} & \textbf{Converged iteration} \\ \hline
+0.001                  & 186901                       \\ \hline
+0.005                  & 37231                        \\ \hline
+0.1                    & 1677                         \\ \hline
+0.5                    & 1                            \\ \hline
+\end{tabular}
+\end{table}
+
+The table \ref{tab:converge_iter} shows that the convergence speed is highly dependent on the learning rate, with smaller values like 0.001 and 0.005 requiring an large number of iterations. In contrast, $lr = 0.5$ is the most efficient in this case, it achieve the local minimum in a single step. 
+
+\end{document}
