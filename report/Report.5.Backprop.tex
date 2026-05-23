@@ -1,0 +1,121 @@
+\documentclass{article}
+\usepackage[utf8]{inputenc}
+\usepackage{geometry}
+\geometry{
+  a4paper,
+  total={170mm,257mm},
+  left=20mm,
+  top=20mm,
+}
+\usepackage{graphicx}
+\usepackage{titling}
+\usepackage{booktabs}
+\usepackage{listings}
+\usepackage{xcolor}
+\usepackage{hyperref}
+\usepackage{fancyvrb}
+\usepackage{float}
+\usepackage{amsmath}
+
+\definecolor{darkblue}{rgb}{0.0, 0.0, 0.5}
+\RecustomVerbatimEnvironment{verbatim}{Verbatim}{formatcom=\color{darkblue}}
+\setlength{\parindent}{0pt}
+
+\title{\textbf{DEEP LEARNING} \\
+{\Large \textbf{Report 5: Backpropagation}}}
+\date{May 2026}
+
+\usepackage{fancyhdr}
+\fancypagestyle{plain}{
+  \fancyhf{}
+  \fancyfoot[L]{\thedate}
+  \fancyfoot[R]{\thepage}
+  \fancyhead[L]{University of Science and Technology of Hanoi}
+  \fancyhead[R]{Deep Learning}
+}
+
+\makeatletter
+\def\@maketitle{%
+  \newpage
+  \vskip 1em
+  \begin{center}
+  \let \footnote \thanks
+    {\LARGE \@title \par}%
+    \vskip 1em
+  \end{center}
+  \par
+  \vskip 1em}
+\makeatother
+
+\begin{document}
+
+\pagestyle{plain}
+\maketitle
+
+\noindent\begin{tabular}{@{}ll}
+  Student: & Do Minh Quang -- 2540095 \\
+\end{tabular}
+
+\section*{Implementation}
+
+\textbf{Feedforward}
+
+The part is done in labwork 4. This part will process inputs layer by layer, calculating the weighted sum \(z\) and activation \(a\) for each neuron.
+
+\[
+z = \sum_{i=1}^{n} x_iw_i + b
+\]
+
+All neurons use the sigmoid activation:
+
+\[
+a = \sigma(z) = \frac{1}{1 + e^{-z}}
+\]
+
+
+\textbf{Backpropagation}
+
+Training relies on minimizing the Cross-Entropy loss function :
+\[
+J = -\frac{1}{N}\sum_{i=1}^N \left[ y_i \log(\hat{y}_i) + (1 - y_i)\log(1 - \hat{y}_i) \right]
+\]
+
+The backpropagation will compute the error in the output layer and propagate it backward to update the weights and biases of each neuron. 
+The error signal \(\delta\) for each neuron is calculated based on the derivative of the loss function with respect to the neuron's output, and then used to update the parameters.
+\begin{itemize}
+    \item \textbf{Output layer:} $\delta = \hat{y} - y$
+    \item \textbf{Hidden layers:} $\delta_j = \left(\sum_k \delta_k w_{kj}\right)\cdot \hat{y}_j(1-\hat{y}_j)$
+\end{itemize}
+where $w_{kj}$ is the weight from hidden neuron $j$ to neuron $k$ in the next layer, and $\delta_k$ is the error signal for neuron $k$ in the next layer.
+
+The weights and biases are updated using the calculated error signals:
+\[
+    w = w - lr \times \delta \times x, \qquad b = b - lr \times \delta
+\]
+
+\textbf{Training Configuration}
+
+The optimization of training loop use a reusable function to compute the gradient descent and the loss. 
+The function will take two callbacks as arguments: one for computing the loss and another for computing the gradients.
+
+The learning rate is set to 0.5, and the training will stop when the loss improvement is less than \(1e-6\) or after a maximum of 10000 epochs.
+\section*{XOR Experiment}
+The model successfully converged at epoch 4000/10000 with the detailed results as follows:
+
+\begin{table}[H]
+\centering
+\caption{XOR Truth Table vs Model Predictions}
+\vspace{0.2cm}
+\begin{tabular}{cccc}
+\toprule
+\textbf{$X_1$} & \textbf{$X_2$} & \textbf{$y$} & \textbf{$\hat{y}$} \\
+\midrule
+0 & 0 & 0 & 0.002586 \\
+0 & 1 & 1 & 0.998124 \\
+1 & 0 & 1 & 0.998118 \\
+1 & 1 & 0 & 0.002663 \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\end{document}
